@@ -71,7 +71,6 @@ plot.filetype       <- "pdf"         # pdf, tiff, png, bmp, ps, tex
 library(dplyr)
 library(tidyr)
 library(ggplot2) 
-library(zoo)
 
 # Create a handy function to add title headings to created CSV files
 my.write <- function(x, file, header, f = write.csv, ...){
@@ -118,9 +117,9 @@ flow.data$WaterDOY <- ifelse(flow.data$Month<10,flow.data$CalendarDOY+92,
 
 # Add 3, 7, and 30-day rolling means of daily flow (using function created above) and annual cumulative flow
 flow.data <- flow.data %>%
-  mutate(ThreeDayQ=round(rollapply(Q,3, mean, fill=NA, align="right"), digits = 3),
-         SevenDayQ=round(rollapply(Q,7, mean, fill=NA, align="right"), digits = 3),
-         ThirtyDayQ=round(rollapply(Q,30, mean, fill=NA, align="right"), digits = 3)) %>% 
+  mutate(ThreeDayQ=round(zoo::rollapply(Q,3, mean, fill=NA, align="right"), digits = 3),
+         SevenDayQ=round(zoo::rollapply(Q,7, mean, fill=NA, align="right"), digits = 3),
+         ThirtyDayQ=round(zoo::rollapply(Q,30, mean, fill=NA, align="right"), digits = 3)) %>%  
   group_by(CalendarYear) %>%
   mutate(CumulativeQCY = cumsum(Q)) %>% 
   group_by(WaterYear) %>% 
