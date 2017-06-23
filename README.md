@@ -2,9 +2,9 @@
 
 ---
 
-## FASST-R - Flow Analysis Statistical Summary Tool for R
+## FASST - Flow Analysis Statistical Summary Tool
 
-This is a set of [R](http://www.r-project.org) scripts to help summarize, analyze, and visualize continuous
+This is a set of [R](http://www.r-project.org) scripts to help summarize, analyze, and visualize long-term and continuous
 streamflow data. 
 
 The scripts uses the [BCWaterDischargeAnalysis](https://github.com/bcgov/BCWaterDischargeAnalysis/) package and 
@@ -119,6 +119,8 @@ Analysis outputs of table (.csv) and plot (.pdf or others by selection) files ar
 We are actively developing this analysis, check the 
 [issues](https://github.com/bcgov/FASST/issues/) for things we would 
 like to fix or work on.
+
+An Excel version of FASST (FASST-X) will be included upon completion.
 
 ### Getting Help or Reporting an Issue
 
