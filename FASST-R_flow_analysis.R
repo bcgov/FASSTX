@@ -41,7 +41,7 @@
 #                 3) Type in the upstream drainage basin area (in square kilometres), if known. If not known, type in 0(zero).
 #
 #                 4) Choose the type of year to analyze, Calendar Year (Jan-Dec) or Water Year (Oct-Dec).
-#                    If Calendar Year, type FALSE, if Water Year, type TRUE.
+#                    If Calendar Year, type FALSE, if Water Year, type TRUE. Water year is identified by the year it ends in (on Sept 30).
 #
 #                 5) Type in the start and end years of the analysis. As continuous data is ideal, select the first and last years of 
 #                    complete data sets.
