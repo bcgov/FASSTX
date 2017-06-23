@@ -21,7 +21,7 @@
 ### Version:      23 June 2017
 ### Source:       https://github.com/bcgov/FASST
 
-### Contact:      Jon Goetz (BC ENV) at jon.goetz@gov.bc.ca
+### Contact:      Jon Goetz (BC ENV) https://github.com/jongoetz
 
 
 ## Description:   This script summarizes continuous daily stream discharge into various long-term, annual, monthly, and daily stream
