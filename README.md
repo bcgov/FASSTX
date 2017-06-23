@@ -148,6 +148,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
     See the License for the specific language governing permissions and
     limitations under the License.
 
-This repository is maintained by [Jon Goetz](mailto:jon.goetz@gov.bc.ca), BC Ministry of Environment.
+This repository is maintained by [Jon Goetz](https://github.com/jongoetz
+), BC Ministry of Environment.
 
 
