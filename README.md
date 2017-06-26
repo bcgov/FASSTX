@@ -7,8 +7,7 @@
 This is a set of [R](http://www.r-project.org) scripts to help summarize, analyze, and visualize long-term and continuous
 streamflow data. 
 
-The scripts uses the [BCWaterDischargeAnalysis](https://github.com/bcgov/BCWaterDischargeAnalysis/) package and 
-your own supplied continuous daily streamflow data in a .csv file to analyze and visualize long-term, annual, monthly, daily, low flows, and trending information.
+The scripts uses the [BCWaterDischargeAnalysis](https://github.com/bcgov/BCWaterDischargeAnalysis/) (developed by C. Schwarz under contract to BC ENV) package and your own supplied continuous daily streamflow data in a .csv file to analyze and visualize long-term, annual, monthly, daily, low flows, and trending information.The script takes analysis results from BCWaterDischargeAnalysis and produces additional custom tables, plots, and analyses outputs.
 
 
 ### Usage
