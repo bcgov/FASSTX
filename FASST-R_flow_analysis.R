@@ -25,7 +25,9 @@
 
 
 ## Description:   This script summarizes continuous daily stream discharge into various long-term, annual, monthly, and daily stream
-#                 metrics for interpretation and visualization, and completes a trending analysis (using your selected method).
+#                 metrics for interpretation and visualization, and completes a trending analysis (using your selected method). This
+#                 script was developed to utilize the BCWaterDischargeAnalysis package (developed by C. Schwarz under contract to BC
+#                 ENV; https://github.com/bcgov/BCWaterDischargeAnalysis) to create additional tables, plots, and analyses outputs.
 
 ## Instructions:  1) Save a .csv file (in the following format) in the working directory (or other) and type in the directory pathway below
 #                     |    Date    | Discharge |
