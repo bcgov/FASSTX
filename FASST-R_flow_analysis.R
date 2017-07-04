@@ -272,25 +272,24 @@ dir.create(longterm.dir)
 
 # Run Analysis and wrangle data
 longterm.stats.results <- compute.Q.stat.longterm(Station.Code=Stream_Name,
-                                                  Station.Area=Drainage_Basin_Area,
                                                   flow=flow.data,
                                                   start.year=Start_Year,
                                                   end.year=End_Year,
-                                                  write.stat.csv = TRUE,
-                                                  write.stat.trans.csv = TRUE,
+                                                  write.cy.stat.csv = ifelse(Water_Year,FALSE,TRUE),
+                                                  write.cy.stat.trans.csv = ifelse(Water_Year,FALSE,TRUE),
+                                                  write.wy.stat.csv = ifelse(Water_Year,TRUE,FALSE),
+                                                  write.wy.stat.trans.csv = ifelse(Water_Year,TRUE,FALSE),
                                                   report.dir=raw.dir,
                                                   csv.nddigits = 4)
 
-longterm.flows <- longterm.stats.results$Q.stat.longterm 
-longterm.flows$Month <-   recode(longterm.flows$Month, "1" = "Jan","2"="Feb", "3"="Mar", "4"="Apr", "5"="May","6"="Jun","7"="Jul","8"="Aug","9"="Sep","10"="Oct","11"="Nov","12"="Dec", "Longterm"="Long-term")
 if (Water_Year == TRUE) {
-  longterm.flows$Month <- factor(longterm.flows$Month, levels=c("Oct","Nov","Dec","Jan", "Feb", "Mar", "Apr", "May","Jun","Jul","Aug","Sep","Long-term"))
+  longterm.flows <- longterm.stats.results$Q.wy.stat.longterm
 } else {
-  longterm.flows$Month <- factor(longterm.flows$Month, levels=c("Jan", "Feb", "Mar", "Apr", "May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Long-term"))
+  longterm.flows <- longterm.stats.results$Q.cy.stat.longterm
 }
 
 # Save the table
-longterm.table <- longterm.flows %>% rename("Mean"=mean,"Median"=median,"Maximum"=max,"Minimum"=min)
+longterm.table <- longterm.flows
 longterm.table[,2:4] <- round(longterm.table[,2:4],4)
 longterm.table <- longterm.table %>% gather(Statistic,Value,2:5) %>% spread(Month,Value)
 my.write(longterm.table,file = paste0(longterm.dir,"/Long-term Summary Statistics (",yeartype.years.label,").csv"), row.names = FALSE,
@@ -304,15 +303,15 @@ longterm.maxmin <- longterm.flows[1:12,c(1,4:5)] %>% gather(Stat,Value,2:3)
 longterm.month <- longterm.flows[1:12,]
 ggplot(longterm.maxmin, aes(Month,Value))+
   geom_col(aes(fill="Max-Min Range"))+
-  geom_hline(aes(yintercept=longterm.stats$mean, colour="Long-term Mean"), size=.6, linetype=2)+
-  geom_hline(aes(yintercept=longterm.stats$median, colour="Long-term Median"), size=.5, linetype=2)+
-  geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$mean,group = 1, colour="Monthly Mean"), size=.6)+
-  geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$mean,group = 1, colour="Monthly Mean"), size=3)+
-  geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$median,group = 1, colour="Monthly Median"), size=.6)+
-  geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$median,group = 1, colour="Monthly Median"), size=3)+
+  geom_hline(aes(yintercept=longterm.stats$Mean, colour="Long-term Mean"), size=.6, linetype=2)+
+  geom_hline(aes(yintercept=longterm.stats$Median, colour="Long-term Median"), size=.5, linetype=2)+
+  geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Mean,group = 1, colour="Monthly Mean"), size=.6)+
+  geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Mean,group = 1, colour="Monthly Mean"), size=3)+
+  geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Median,group = 1, colour="Monthly Median"), size=.6)+
+  geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Median,group = 1, colour="Monthly Median"), size=3)+
   scale_fill_manual(values = c("Max-Min Range"="lightblue"))+
   scale_colour_manual(values = c("Long-term Mean"="skyblue2","Long-term Median"="dodgerblue4", "Monthly Mean"="skyblue2","Monthly Median"="dodgerblue4"))+
-  scale_y_log10(expand = c(0, 0))+   #scale_y_continuous(expand = c(0, 0))+   #
+  scale_y_log10(expand = c(0, 0))+   #scale_y_continuous(expand = c(0, 0))+
   annotation_logticks(base= 10,"l",colour = "grey25",size=0.3,short = unit(.07, "cm"), mid = unit(.15, "cm"), long = unit(.2, "cm"))+
   ylab("Discharge (cms)")+
   guides(fill=guide_legend(override.aes = list(linetype=0,shape='')),
