@@ -108,7 +108,6 @@ Analysis outputs of table (.csv) and plot (.pdf or others by selection) files ar
 
 
 ### Known Issues
- - Long-term percentiles not grouped by Water Years yet (BCWaterDischargeAnalysis issue)
  - Days above or below normal (Annual metric) not included for Water Year (BCWaterDischargeAnalysis issue)
  - General issues related to Water Year metrics for Oct, Nov, and Dec (BCWaterDischargeAnalysis issue)
 
