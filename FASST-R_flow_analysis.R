@@ -83,9 +83,9 @@ trends_method <- "All"                  # "MKSens_Zhang" (zyp) / "MKSens_YuePilo
 alpha <- 0.05
 
 
-## Missing Values Control
-na.rm                   <- list(na.rm.global=FALSE) # If FALSE then stats for months/year period may not be computed if there is missing a value
-# If TRUE then stats for months/year period are computed if there is missing a value
+## Missing Dates Control
+na.rm                   <- list(na.rm.global=FALSE) # If FALSE then stats for time period may not be computed if there is missing a date
+                                                    # If TRUE then stats for time period are computed if there is missing a date
 
 
 ## Plot Output File Type:
