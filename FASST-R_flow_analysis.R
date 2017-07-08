@@ -18,7 +18,7 @@
 ###     ***  Flow Analysis and Trending  ***                                ###
 ###############################################################################
 
-### Version:      23 June 2017
+### Version:      07 July 2017
 ### Source:       https://github.com/bcgov/FASST
 
 ### Contact:      Jon Goetz (BC ENV) https://github.com/jongoetz
@@ -403,11 +403,11 @@ annual.stats.results <- compute.Q.stat.annual(Station.Code=Stream_Name,
                                               na.rm=na.rm)
 
 if (Water_Year == TRUE) {
-  all.annual.temp1 <- annual.stats.results$Q.stat.annual[,c(1,99:115,19:21,23:25,116:119)]  ## JUST WATER YEAR STATS, MISSING DAY OF YEAR
-  all.annual.temp2 <- annual.stats.results$Q.stat.annual[,c(1,22,26)] %>% mutate(Year=Year+1) #shift OND values to match WY
+  all.annual.temp1 <- annual.stats.results$Q.stat.annual[,c(1,101:119,21:23,25:27,120:123)]  ## JUST WATER YEAR STATS, MISSING DAY OF YEAR
+  all.annual.temp2 <- annual.stats.results$Q.stat.annual[,c(1,24,28)] %>% mutate(Year=Year+1) #shift OND values to match WY
   all.annual <- merge(all.annual.temp1,all.annual.temp2,by="Year",all=TRUE) %>% filter(Year<=End_Year)
 } else {
-  all.annual <- annual.stats.results$Q.stat.annual[,c(1,2:21,23:25,116:119,22,26)]
+  all.annual <- annual.stats.results$Q.stat.annual[,c(1,2:23,25:27,120:123,24,28)]
 }
 
 
@@ -415,8 +415,8 @@ if (Water_Year == TRUE) {
 #####################################
 
 # Wrangle data
-annual.flows <- all.annual[,c(1,10:12)]
-colnames(annual.flows) <- c("Year","Minimum","Maximum","Mean") ### ADD MEDIAN
+annual.flows <- all.annual %>% select(Year,contains("MIN_DAILY"),contains("MAX_DAILY"),contains("MEAN_DAILY"),contains("MEDIAN_DAILY"))
+colnames(annual.flows) <- c("Year","Minimum","Maximum","Mean","Median")
 
 #Save the table
 annual.flows.table <- annual.flows %>% mutate(Mean=round(Mean,4))
@@ -424,7 +424,7 @@ my.write(annual.flows.table,file = paste0(annual.dir,"/Annual Summary Statistics
          header = paste0("Annual Summary Statistics - ",Stream_Name," (",yeartype.years.label,")"))
 
 #Save the plot
-annual.flows.long <- annual.flows %>% gather(Statistic, Value,2:4)
+annual.flows.long <- annual.flows %>% gather(Statistic, Value,2:5)
 ggplot(annual.flows.long,aes(Year,Value, colour=Statistic))+
   geom_line()+
   geom_point()+
@@ -434,8 +434,8 @@ ggplot(annual.flows.long,aes(Year,Value, colour=Statistic))+
   #ggtitle(paste0("Annual Streamflow - ",Stream_Name," (",yeartype.years.label,")"))+
   ylab("Discharge (cms)")+
   xlab(paste(yeartype.label))+
-  scale_color_manual(values = c("Maximum" = "dodgerblue3", "Mean" = "skyblue1", "Minimum" = "turquoise"),
-                     labels = c("Maximum" = "Max. Daily", "Mean" = "Mean Daily", "Minimum" = "Min. Daily"))+
+  scale_color_manual(values = c("Maximum" = "dodgerblue3", "Mean" = "skyblue1", "Minimum" = "turquoise", "Median"="blueviolet"),
+                     labels = c("Maximum" = "Max. Daily", "Mean" = "Mean Daily", "Minimum" = "Min. Daily","Median"="Median Daily"))+
   theme(#plot.title = element_text(size=12, colour = "grey25",face="italic"),
     panel.border = element_rect(colour = "grey80", fill=NA, size=.1),
     panel.grid = element_line(size=.2),
@@ -449,10 +449,10 @@ ggplot(annual.flows.long,aes(Year,Value, colour=Statistic))+
 
 # Wrangle data
 if (Water_Year==TRUE){
-  annual.yield.flows <- all.annual[,c(1,14,30,22:24,27,28)]  #yield.flows <- stat.annual$Q.stat.annual[,c(1,13,15:18)]
+  annual.yield.flows <-all.annual %>% select(Year,wY_YIELDMM_DAILY_SW,OND_YIELDMM_DAILY_SW,JFM_YIELDMM_DAILY_SW,AMJ_YIELDMM_DAILY_SW,JAS_YIELDMM_DAILY_SW,ONDJFM_YIELDMM_DAILY_SW,AMJJAS_YIELDMM_DAILY_SW)  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
   colnames(annual.yield.flows) <- c("Year","Total Annual Yield","Oct-Dec Yield","Jan-Mar Yield","Apr-Jun Yield","Jul-Sep Yield","Oct-Mar Yield","Apr-Sep Yield")
 } else {
-  annual.yield.flows <- all.annual[,c(1,14,22:24,30,27,28)]  #yield.flows <- stat.annual$Q.stat.annual[,c(1,13,15:18)]
+  annual.yield.flows <-all.annual %>% select(Year,CY_YIELDMM_DAILY_SW,JFM_YIELDMM_DAILY_SW,AMJ_YIELDMM_DAILY_SW,JAS_YIELDMM_DAILY_SW,OND_YIELDMM_DAILY_SW,ONDJFM_YIELDMM_DAILY_SW,AMJJAS_YIELDMM_DAILY_SW)  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
   colnames(annual.yield.flows) <- c("Year","Total Annual Yield","Jan-Mar Yield","Apr-Jun Yield","Jul-Sep Yield","Oct-Dec Yield","Oct-Mar Yield","Apr-Sep Yield")
 }
 
@@ -491,10 +491,10 @@ ggplot(data=annual.yield.flows.long, aes(x=Year, y=Value))+
 
 # Wrangle data
 if (Water_Year==TRUE){
-  annual.totalQ.flows <- all.annual[,c(1,29,13,19:21,25,26)]  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
+  annual.totalQ.flows <- all.annual %>% select(Year,WY_TOTALQ_DAILY_SW,OND_TOTALQ_DAILY_SW,JFM_TOTALQ_DAILY_SW,AMJ_TOTALQ_DAILY_SW,JAS_TOTALQ_DAILY_SW,ONDJFM_TOTALQ_DAILY_SW,AMJJAS_TOTALQ_DAILY_SW)  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
   colnames(annual.totalQ.flows) <- c("Year","Annual Total","Oct-Dec Total","Jan-Mar Total","Apr-Jun Total","Jul-Sep Total","Oct-Mar Total","Apr-Sep Total")
 } else {
-  annual.totalQ.flows <- all.annual[,c(1,13,19:21,29,25,26)]  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
+  annual.totalQ.flows <- all.annual %>% select(Year,CY_TOTALQ_DAILY_SW,JFM_TOTALQ_DAILY_SW,AMJ_TOTALQ_DAILY_SW,JAS_TOTALQ_DAILY_SW,OND_TOTALQ_DAILY_SW,ONDJFM_TOTALQ_DAILY_SW,AMJJAS_TOTALQ_DAILY_SW)  #totalQ <- stat.annual$Q.stat.annual[,c(1,13:14,19:26,99:105)]
   colnames(annual.totalQ.flows) <- c("Year","Annual Total","Jan-Mar Total","Apr-Jun Total","Jul-Sep Total","Oct-Dec Total","Oct-Mar Total","Apr-Sep Total")
 }
 
@@ -531,14 +531,16 @@ ggplot(data=annual.totalQ.long, aes(x=Year, y=Value))+
 #####################################
 
 # Wrangle data
-annual.timing.flows <- all.annual[,c(1,16:18)]#timing.flows <- stat.annual$Q.stat.annual[,c(1,16:18)]
-colnames(annual.timing.flows) <- c("Year","Day of 25% of Flow","Day of 50% of Flow","Day of 75% of Flow")
+annual.timing.flows <- all.annual %>% select(Year,contains("P_CUMQ"))#timing.flows <- stat.annual$Q.stat.annual[,c(1,16:18)]
+colnames(annual.timing.flows) <- c("Year","Day of 25% of Flow","Day of 33% of Flow","Day of 50% of Flow","Day of 75% of Flow")
 if (Water_Year==TRUE){
   annual.timing.flows$"Date of 25% of Flow" <- as.Date(annual.timing.flows$"Day of 25% of Flow", origin = paste0(annual.timing.flows$Year-1,"-09-30"))
+  annual.timing.flows$"Date of 33% of Flow" <- as.Date(annual.timing.flows$"Day of 33% of Flow", origin = paste0(annual.timing.flows$Year-1,"-09-30"))
   annual.timing.flows$"Date of 50% of Flow" <- as.Date(annual.timing.flows$"Day of 50% of Flow", origin = paste0(annual.timing.flows$Year-1,"-09-30"))
   annual.timing.flows$"Date of 75% of Flow" <- as.Date(annual.timing.flows$"Day of 75% of Flow", origin = paste0(annual.timing.flows$Year-1,"-09-30"))
 } else {
   annual.timing.flows$"Date of 25% of Flow" <- as.Date(annual.timing.flows$"Day of 25% of Flow", origin = paste0(annual.timing.flows$Year-1,"-12-31"))
+  annual.timing.flows$"Date of 33% of Flow" <- as.Date(annual.timing.flows$"Day of 33% of Flow", origin = paste0(annual.timing.flows$Year-1,"-12-31"))
   annual.timing.flows$"Date of 50% of Flow" <- as.Date(annual.timing.flows$"Day of 50% of Flow", origin = paste0(annual.timing.flows$Year-1,"-12-31"))
   annual.timing.flows$"Date of 75% of Flow" <- as.Date(annual.timing.flows$"Day of 75% of Flow", origin = paste0(annual.timing.flows$Year-1,"-12-31"))
 }
@@ -549,7 +551,7 @@ my.write(annual.timing.table,file = paste0(annual.dir,"/Timing of Annual Flows (
          header = paste0("Timing of Annual Flows - ",Stream_Name," (",yeartype.years.label,")"))
 
 #Save the plot
-annual.timing.flows.long <- annual.timing.flows[,c(1,2:4)] %>% gather(Percent,Date,2:4)
+annual.timing.flows.long <- annual.timing.flows[,c(1,2:5)] %>% gather(Percent,Date,2:5)
 ggplot(annual.timing.flows.long,aes(Year,Date, colour=Percent))+
   geom_line()+
   geom_point()+
@@ -558,7 +560,7 @@ ggplot(annual.timing.flows.long,aes(Year,Date, colour=Percent))+
   xlab(paste(yeartype.label))+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 12))+
   scale_y_continuous(breaks = scales::pretty_breaks(n = 6))+
-  scale_color_manual(values = c("Day of 25% of Flow" = "dodgerblue3", "Day of 50% of Flow" = "skyblue1", "Day of 75% of Flow" = "turquoise"))+
+  scale_color_manual(values = c("Day of 25% of Flow" = "dodgerblue3", "Day of 33% of Flow" = "blueviolet","Day of 50% of Flow" = "skyblue1", "Day of 75% of Flow" = "turquoise"))+
   theme(#plot.title = element_text(size=12, colour = "grey25",face="italic"),
     panel.border = element_rect(colour = "grey80", fill=NA, size=.1),
     panel.grid = element_line(size=.2),
@@ -570,13 +572,7 @@ ggplot(annual.timing.flows.long,aes(Year,Date, colour=Percent))+
 ### Days above Normal
 #####################################
 
-if (Water_Year==TRUE){
-  annual.days.normal <- annual.stats.results$Q.stat.annual[,c(1,120:122)]  ## JUST CALENDAR YEAR STATS
-  annual.days.normal[2:4] <- NA
-} else {
-  annual.days.normal <- annual.stats.results$Q.stat.annual[,c(1,120:122)]  ## JUST CALENDAR YEAR STATS
-}
-
+annual.days.normal <- annual.stats.results$Q.stat.annual %>% select(Year,contains("_N_"))  ## JUST WATER YEAR STATS
 colnames(annual.days.normal) <- c("Year","Days Below 25th Percentile","Days Above 75th Percentile","Days Outside 25-75th Percentiles")
 
 # Save the table
@@ -590,7 +586,7 @@ ggplot(annnual.days.normal.long,aes(Year,Value, colour=Statistic))+
   geom_point()+
   #ggtitle(paste0("Number of Days Outside of Normal (25-75th Percentiles) - ",Stream_Name," (",yeartype.years.label,")"))+
   ylab("Number of Days")+
-  xlab("Year")+
+  xlab(paste(yeartype.label))+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 12))+
   scale_y_continuous(breaks = scales::pretty_breaks(n = 6))+
   scale_color_manual(values = c("Days Below 25th Percentile" = "red2", "Days Above 75th Percentile" = "dodgerblue3", "Days Outside 25-75th Percentiles" = "purple3"))+
@@ -632,14 +628,14 @@ annual.stats.results <- compute.Q.stat.annual(Station.Code=Stream_Name,
                                               na.rm=na.rm)
 
 if (Water_Year == TRUE) {
-  all.monthly.temp1 <- annual.stats.results$Q.stat.annual[,c(1,27:35,39:47,51:59,63:71,75:83,87:95)]
-  all.monthly.temp2 <- annual.stats.results$Q.stat.annual[,c(1,36:38,48:50,60:62,72:74,84:86,96:98)] %>% mutate(Year=Year+1)
+  all.monthly.temp1 <- annual.stats.results$Q.stat.annual[,c(1,29:37,41:49,53:61,65:73,77:85,89:97)]
+  all.monthly.temp2 <- annual.stats.results$Q.stat.annual[,c(1,38:40,50:52,62:64,74:76,86:88,98:100)] %>% mutate(Year=Year+1)
   all.monthly <- merge(all.monthly.temp1,all.monthly.temp2,by="Year",all=TRUE) %>% filter(Year<=End_Year)
   all.monthly <- all.monthly[,c(1,56:58,2:10,59:61,11:19,62:64,20:28,65:67,29:37,68:70,38:46,71:73,47:55)]
   monthly.flows <- all.monthly
   colnames(monthly.flows) <- c("Year","October Minimum","November Minimum","December Minimum","January Minimum","February Minimum","March Minimum","April Minimum","May Minimum","June Minimum","July Minimum","August Minimum","September Minimum","October Maximum","November Maximum","December Maximum","January Maximum","February Maximum","March Maximum","April Maximum","May Maximum","June Maximum","July Maximum","August Maximum","September Maximum","October Mean","November Mean","December Mean","January Mean","February Mean","March Mean","April Mean","May Mean","June Mean","July Mean","August Mean","September Mean","October Median","November Median","December Median","January Median","February Median","March Median","April Median","May Median","June Median","July Median","August Median","September Median","October 20th Percentile","November 20th Percentile","December 20th Percentile","January 20th Percentile","February 20th Percentile","March 20th Percentile","April 20th Percentile","May 20th Percentile","June 20th Percentile","July 20th Percentile","August 20th Percentile","September 20th Percentile","October 10th Percentile","November 10th Percentile","December 10th Percentile","January 10th Percentile","February 10th Percentile","March 10th Percentile","April 10th Percentile","May 10th Percentile","June 10th Percentile","July 10th Percentile","August 10th Percentile","September 10th Percentile")
 } else {
-  all.monthly <- annual.stats.results$Q.stat.annual[,c(1,27:98)]
+  all.monthly <- annual.stats.results$Q.stat.annual[,c(1,29:100)]
   monthly.flows <- all.monthly
   colnames(monthly.flows) <- c("Year","January Minimum","February Minimum","March Minimum","April Minimum","May Minimum","June Minimum","July Minimum","August Minimum","September Minimum","October Minimum","November Minimum","December Minimum","January Maximum","February Maximum","March Maximum","April Maximum","May Maximum","June Maximum","July Maximum","August Maximum","September Maximum","October Maximum","November Maximum","December Maximum","January Mean","February Mean","March Mean","April Mean","May Mean","June Mean","July Mean","August Mean","September Mean","October Mean","November Mean","December Mean","January Median","February Median","March Median","April Median","May Median","June Median","July Median","August Median","September Median","October Median","November Median","December Median","January 20th Percentile","February 20th Percentile","March 20th Percentile","April 20th Percentile","May 20th Percentile","June 20th Percentile","July 20th Percentile","August 20th Percentile","September 20th Percentile","October 20th Percentile","November 20th Percentile","December 20th Percentile","January 10th Percentile","February 10th Percentile","March 10th Percentile","April 10th Percentile","May 10th Percentile","June 10th Percentile","July 10th Percentile","August 10th Percentile","September 10th Percentile","October 10th Percentile","November 10th Percentile","December 10th Percentile")
 }
@@ -896,7 +892,7 @@ annual.stats.results <- compute.Q.stat.annual(Station.Code=Stream_Name,
                                               na.rm=na.rm)
 
 if (Water_Year == TRUE) {
-  lowflow.flows <- annual.stats.results$Q.stat.annual[,c(1,99:106)]
+  lowflow.flows <- annual.stats.results$Q.stat.annual[,c(1,101:108)]
 } else {
   lowflow.flows <- annual.stats.results$Q.stat.annual[,c(1:9)]
 }
