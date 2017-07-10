@@ -118,9 +118,9 @@ yeartype.label <- ifelse(Water_Year,"Water Year","Calendar Year")
 yeartype.years.label <- ifelse(Water_Year,paste0("Water Years ",Start_Year,"-",End_Year),paste0("Calendar Years ",Start_Year,"-",End_Year))
 
 # Create directories for results
-report.dir <- paste0('AnalysisOutput - ',Stream_Name)
+report.dir <- paste0('Analysis Output - ',Stream_Name)
 dir.create(report.dir)
-raw.dir <- paste0('AnalysisOutput - ',Stream_Name,"/8. BCWaterDischargeAnalysis Outputs")
+raw.dir <- paste0('Analysis Output - ',Stream_Name,"/8. BCWaterDischargeAnalysis Outputs")
 dir.create(raw.dir)
 
 ### Load data from CSV file (create blank time-series from the start and end year and paste the flow values into the appropriate dates)
@@ -134,7 +134,7 @@ flow.data <- merge(data.frame(Date=seq((as.Date((paste((as.numeric(format(min(fl
 # Module 3. Time-series Record
 ###############################################################################
 
-timeseries.dir <- paste0('AnalysisOutput - ',Stream_Name,"/1. Time-series Record")
+timeseries.dir <- paste0('Analysis Output - ',Stream_Name,"/1. Time-series Record")
 dir.create(timeseries.dir)
 
 # Gather data and add more date summary columns
@@ -267,7 +267,7 @@ my.write(timeseries.summary, file = paste0(timeseries.dir,"/Annual Time-series S
 # Module 4. Long-term - Summary Statistics
 ###############################################################################
 
-longterm.dir <- paste0('AnalysisOutput - ',Stream_Name,"/2. Long-term Flows")  # current director
+longterm.dir <- paste0('Analysis Output - ',Stream_Name,"/2. Long-term Flows")  # current director
 dir.create(longterm.dir)
 
 # Run Analysis and wrangle data
@@ -331,7 +331,7 @@ ggplot(longterm.maxmin, aes(Month,Value))+
 # Module 5. Long-term - Percentiles and flow duration
 ###############################################################################
 
-longterm.dir <- paste0('AnalysisOutput - ',Stream_Name,"/2. Long-term Flows")  # current director
+longterm.dir <- paste0('Analysis Output - ',Stream_Name,"/2. Long-term Flows")  # current director
 dir.create(longterm.dir)
 
 # Run Analysis and wrangle data
@@ -346,14 +346,13 @@ longterm.percentiles.results <- compute.Q.percentile.longterm(Station.Code=Strea
                                                               report.dir=raw.dir,
                                                               csv.nddigits = 4)
 
-percentile.flows.long <- longterm.percentiles.results$Q.percentile.stat %>% gather(Percentile, Value, 2:24)
-percentile.flows.long$Month[percentile.flows.long$Month=="All years"] <- "Long-term"
-percentile.flows.long$Percentile <- 100-as.numeric(gsub("P","",percentile.flows.long$Percentile))
+
 if (Water_Year == TRUE) {
-  percentile.flows.long$Month <- factor(percentile.flows.long$Month, levels=c("Oct","Nov","Dec","Jan", "Feb", "Mar", "Apr", "May","Jun","Jul","Aug","Sep","Long-term"))
+  percentile.flows.long <- longterm.percentiles.results$Q.wy.percentile.stat %>% gather(Percentile, Value, 2:24)
 } else {
-  percentile.flows.long$Month <- factor(percentile.flows.long$Month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Long-term'))
+  percentile.flows.long <- longterm.percentiles.results$Q.cy.percentile.stat %>% gather(Percentile, Value, 2:24)
 }
+percentile.flows.long$Percentile <- 100-as.numeric(gsub("P","",percentile.flows.long$Percentile))
 
 # save the table
 percentile.flows.table <- percentile.flows.long %>% spread(Month,Value) %>% mutate(Percentile = 100-Percentile)
@@ -383,7 +382,7 @@ ggplot(percentile.flows.long,aes(x=Percentile,y=Value,colour=Month))+
 # Module 6. Annual Summary Statistics, Yield/Discharge
 ###############################################################################
 
-annual.dir <- paste0('AnalysisOutput - ',Stream_Name,"/3. Annual Flows")  # current director
+annual.dir <- paste0('Analysis Output - ',Stream_Name,"/3. Annual Flows")  # current director
 dir.create(annual.dir)
 
 # Run Analysis and wrangle data
@@ -607,7 +606,7 @@ ggplot(annnual.days.normal.long,aes(Year,Value, colour=Statistic))+
 # Module 7. Monthly Summary Statistics
 ###############################################################################
 
-month.dir <- paste0('AnalysisOutput - ',Stream_Name,"/4. Monthly Flows")  # current director
+month.dir <- paste0('Analysis Output - ',Stream_Name,"/4. Monthly Flows")  # current director
 dir.create(month.dir)
 
 
@@ -687,7 +686,7 @@ dev.off()
 # Module 8. Daily Statistics
 ###############################################################################
 
-daily.dir <- paste0('AnalysisOutput - ',Stream_Name,"/5. Daily Flows")  # current director
+daily.dir <- paste0('Analysis Output - ',Stream_Name,"/5. Daily Flows")  # current director
 dir.create(daily.dir)
 
 # Wrangle data (not part of BCWaterDishcargeAnalysis package)
@@ -872,7 +871,7 @@ dev.off()
 # Module 9. Low Flows - Annual Low Flows and Dates
 ###############################################################################
 
-lowflow.dir <- paste0('AnalysisOutput - ',Stream_Name,"/6. Low Flows")  # current director
+lowflow.dir <- paste0('Analysis Output - ',Stream_Name,"/6. Low Flows")  # current director
 dir.create(lowflow.dir)
 
 # Run Analysis and wrangle data
@@ -955,7 +954,7 @@ ggplot(lowflow.date.long, aes(Year,Value, colour=Statistic))+
 # Module 10. Low Flows - Low Flow Frequency Analysis
 ###############################################################################
 
-lowflow.dir <- paste0('AnalysisOutput - ',Stream_Name,"/6. Low Flows")  # current director
+lowflow.dir <- paste0('Analysis Output - ',Stream_Name,"/6. Low Flows")  # current director
 dir.create(lowflow.dir)
 
 # Run Analysis and wrangle data
@@ -1008,7 +1007,7 @@ lowflow.freq.plot <- lowflow.freq.results$freqplot+
 # *** Must run Modules 6 and 7 beforehand to complete
 ###############################################################################
 
-trends.dir <- paste0('AnalysisOutput - ',Stream_Name,"/7. Annual Trends")  # current director
+trends.dir <- paste0('Analysis Output - ',Stream_Name,"/7. Annual Trends")  # current director
 dir.create(trends.dir)
 
 
