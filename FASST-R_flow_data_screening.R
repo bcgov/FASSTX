@@ -82,10 +82,10 @@ my.write <- function(x, file, header, f = write.csv, ...){
 
 
 # Create directories for results
-report.dir <- paste0('AnalysisOutput - ',Stream_Name)  # current director
+report.dir <- paste0('Analysis Output - ',Stream_Name)  # current director
 dir.create(report.dir)
 
-screening.dir <- paste0('AnalysisOutput - ',Stream_Name,"/0. Data Screening")  # current director
+screening.dir <- paste0('Analysis Output - ',Stream_Name,"/0. Data Screening")  # current director
 dir.create(screening.dir)
 
 # Load flow csv file and fill any gaps with NA
