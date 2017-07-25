@@ -229,8 +229,8 @@ flow.summary <- merge(flow.summary,flow.summary.months, by="Year")
 # Write the record summary
 my.write(flow.summary[,1:7], file = paste0(screening.dir,"/Annual Time-series Summary (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),").csv"), row.names = FALSE,
          header = paste0("Annual Time-series Summary - ",Stream_Name," (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),")"))
-my.write(flow.summary[,-(2:5)], file = paste0(screening.dir,"/Data Completion and Missing Dates (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),").csv"), row.names = FALSE,
-         header = paste0("Data Completion and Missing Dates - ",Stream_Name," (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),")"))
+my.write(flow.summary[,-(2:5)], file = paste0(screening.dir,"/Data Availability and Missing Dates (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),").csv"), row.names = FALSE,
+         header = paste0("Data Availability and Missing Dates - ",Stream_Name," (",min(flow.data$CalendarYear),"-",max(flow.data$CalendarYear),")"))
 
 
 ### Plot the record summary 
