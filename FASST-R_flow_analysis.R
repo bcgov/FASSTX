@@ -70,7 +70,7 @@ Drainage_Basin_Area     <- 795
 ## Analysis Information
 Water_Year              <- FALSE
 Start_Year              <- 1971
-End_Year                <- 2010
+End_Year                <- 2000
 
 
 ## Frequency Analysis Options
@@ -79,7 +79,7 @@ FA_Distribution            <- "PIII"     # "PIII" = Pearson Log III distribution
 
 
 ## Trending Options
-trends_method <- "All"                  # "MKSens_Zhang" (zyp) / "MKSens_YuePilon" (zyp) / "LinearRegression" / "All" / "None"
+trends_method <- "MKSens_Zhang"                  # "MKSens_Zhang" (zyp) / "MKSens_YuePilon" (zyp) / "LinearRegression" / "All" / "None"
 alpha <- 0.05
 
 
@@ -829,7 +829,10 @@ daily.cumulative.plot <- ggplot(daily.cumulative.flows,aes(x=analysis.Date)) +
   geom_ribbon(aes(ymin=TwentyFifthPercentile,ymax=SeventyFifthPercentile,fill = "25th-75th Percentile"))+
   geom_ribbon(aes(ymin=SeventyFifthPercentile,ymax=NinetyFifthPercentile,fill = "75th-95th Percentile"))+
   geom_ribbon(aes(ymin=NinetyFifthPercentile,ymax=Maximum,fill = "95th Percentile-Max"))+
+  geom_line(aes(y=Median, colour="Median"), size=.5) +
+  geom_line(aes(y=Mean, colour="Mean"), size=.5) +
   scale_fill_manual(values = c("Min-5th Percentile" = "orange" ,"5th-25th Percentile" = "yellow", "25th-75th Percentile" = "skyblue1","75th-95th Percentile" = "dodgerblue2","95th Percentile-Max" = "royalblue4")) +
+  scale_color_manual(values = c("Median"="purple3","Mean"="springgreen4")) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_date(date_labels = "%b", date_breaks = "1 month", limits = as.Date(c(NA,as.character(max(daily.cumulative.flows$analysis.Date)))),expand=c(0,0)) +
   xlab(NULL)+
@@ -856,9 +859,9 @@ plot(daily.cumulative.plot)
 for (yr in unique(daily.flows.data$analysis.Year)){
   daily.cumulative.year.data <- daily.flows.data %>% filter(analysis.Year==yr)
   daily.cumulative.plot.year <- daily.cumulative.plot +
-    geom_line(data = daily.cumulative.year.data, aes(x=analysis.Date, y=analysis.CumQ*.0864, colour= "yr.colour"), size=1) +
-    scale_color_manual(values = c("yr.colour" = "red"),
-                       labels = c(paste0(yr," Flows")))
+    geom_line(data = daily.cumulative.year.data, aes(x=analysis.Date, y=analysis.CumQ*.0864, colour= "yr.colour"), size=.7) +
+    scale_color_manual(values = c("yr.colour" = "red","Median"="purple3","Mean"="springgreen4"),
+                       labels = c("Median","Mean",paste0(yr," Flows")))
   plot(daily.cumulative.plot.year)
 }
 dev.off()
