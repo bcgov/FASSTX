@@ -79,13 +79,13 @@ FA_Distribution            <- "PIII"     # "PIII" = Pearson Log III distribution
 
 
 ## Trending Options
-trends_method <- "MKSens_Zhang"                  # "MKSens_Zhang" (zyp) / "MKSens_YuePilon" (zyp) / "LinearRegression" / "All" / "None"
+trends_method             <- "MKSens_Zhang"                  # "MKSens_Zhang" (zyp) / "MKSens_YuePilon" (zyp) / "LinearRegression" / "All" / "None"
 alpha <- 0.05
 
 
 ## Missing Dates Control
-na.rm                   <- list(na.rm.global=FALSE) # If FALSE then stats for time period may not be computed if there is missing a date
-                                                    # If TRUE then stats for time period are computed if there is missing a date
+ignore.missing         <- FALSE          # If FALSE then stats for time period that includes the missing value will not be computed
+                                        # If TRUE then stats for a time period that includes the missing value will be calculated
 
 
 ## Plot Output File Type:
@@ -104,6 +104,12 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+
+if (ignore.missing){
+  na.rm<- list(na.rm.global=TRUE)
+} else {
+  na.rm<- list(na.rm.global=FALSE)
+}
 
 # Create a handy function to add title headings to the first row of outputted CSV files
 my.write <- function(x, file, header, f = write.csv, ...){
