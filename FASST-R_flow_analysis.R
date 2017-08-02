@@ -305,29 +305,26 @@ my.write(longterm.table,file = paste0(longterm.dir,"/Long-term Summary Statistic
 
 # Save the plot
 longterm.stats <- longterm.flows[13,]
-longterm.maxmin <- longterm.flows[1:12,c(1,4:5)] %>% gather(Stat,Value,2:3)
+longterm.maxmin <- longterm.flows[1:12,c(1,4:5)]
 longterm.month <- longterm.flows[1:12,]
 ggplot(longterm.maxmin, aes(Month,Value))+
-  geom_col(aes(fill="Max-Min Range"))+
+  geom_segment(aes(x=Month, xend=Month, y=Maximum, yend=Minimum,colour="Max-Min Range"), size=20)+
   geom_hline(aes(yintercept=longterm.stats$Mean, colour="Long-term Mean"), size=.6, linetype=2)+
   geom_hline(aes(yintercept=longterm.stats$Median, colour="Long-term Median"), size=.5, linetype=2)+
   geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Mean,group = 1, colour="Monthly Mean"), size=.6)+
   geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Mean,group = 1, colour="Monthly Mean"), size=3)+
   geom_line(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Median,group = 1, colour="Monthly Median"), size=.6)+
   geom_point(data=longterm.month,aes(x=longterm.month$Month,y=longterm.month$Median,group = 1, colour="Monthly Median"), size=3)+
-  scale_fill_manual(values = c("Max-Min Range"="lightblue"))+
-  scale_colour_manual(values = c("Long-term Mean"="skyblue2","Long-term Median"="dodgerblue4", "Monthly Mean"="skyblue2","Monthly Median"="dodgerblue4"))+
+  scale_colour_manual(values = c("Max-Min Range"="lightblue2","Long-term Mean"="skyblue2","Long-term Median"="dodgerblue4", "Monthly Mean"="skyblue2","Monthly Median"="dodgerblue4"))+
   scale_y_log10(expand = c(0, 0))+   #scale_y_continuous(expand = c(0, 0))+
   annotation_logticks(base= 10,"l",colour = "grey25",size=0.3,short = unit(.07, "cm"), mid = unit(.15, "cm"), long = unit(.2, "cm"))+
   ylab("Discharge (cms)")+
-  guides(fill=guide_legend(override.aes = list(linetype=0,shape='')),
-         colour=guide_legend(override.aes = list(linetype=c(2,2,1,1), shape=c(NA,NA,16,16))))+
-  #ggtitle(paste0("Longterm Flows - ",Stream_Name," (",yeartype.years.label,")"))+
   theme(legend.position = "right", legend.title = element_blank(),legend.margin=unit(0, "cm"),legend.justification = "top",
         panel.border = element_rect(colour = "grey80", fill=NA, size=.1),
         plot.title = element_text(size=12, colour = "grey25",face="italic"),
         panel.grid = element_line(size=.2),
         panel.grid.major.x  = element_blank())+
+  guides(colour=guide_legend(override.aes = list(size=c(.5,.5,3,2,2),linetype=c(3,3,1,0,0),shape=c(NA,NA,NA,16,16))))+
   ggsave(filename = paste0(longterm.dir,"/Long-term Summary Statistics (",yeartype.years.label,").",plot.type),height=6, width = 11)
 
 
