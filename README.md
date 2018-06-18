@@ -2,7 +2,10 @@
 
 ---
 
+
 ## FASST - Flow Analysis Statistical Summary Tool
+
+### PLEASE NOTE THE R-SCRIPTS HAVE BEEN TEMPORARILY REMOVED. THE EXCEL TOOL STILL REMAINS.
 
 This is a set of [R](http://www.r-project.org) scripts to help summarize, analyze, and visualize long-term and continuous
 streamflow data. 
