@@ -28,7 +28,7 @@ For the R package `fasstr`, see <https://github.com/bcgov/fasstr>.
 
 ### Using FASST-X
 
-Download the latest version of the FASST-X tool [here](https://github.com/bcgov/FASSTX/raw/master/FASST-X%20Jan2018.xlsm) or above, currently dated Jan 2018. Currently only works on Windows-based Excel versions.
+Download the latest version of the FASST-X tool [here](https://github.com/bcgov/FASSTX/raw/master/FASST-X%20Jan2018.xlsm) or above, currently dated Jan 2018. Currently works just for Windows-based Excel versions.
 
 FASST-X requires daily streamflow data (in cubic metres per second) to compute summary statistics. This data can be entered on the main 'Flow Data Input' worksheet. Other parameters such as station name, drainage basin area (used for yield runoff calculations), selection of calendar or water years, and selection of start and end years can also be selected on the main 'Flow Data Input' worksheet.
 

@@ -30,7 +30,7 @@ For the R package `fasstr`, see <https://github.com/bcgov/fasstr>.
 
 Download the latest version of the FASST-X tool
 [here](https://github.com/bcgov/FASSTX/raw/master/FASST-X%20Jan2018.xlsm)
-or above, currently dated Jan 2018. Currently only works on
+or above, currently dated Jan 2018. Currently works just for
 Windows-based Excel versions.
 
 FASST-X requires daily streamflow data (in cubic metres per second) to
